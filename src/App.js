@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Map from "./components/Map";
 import Loader from "./components/Loader";
 
-function App() {
+const App = () => {
     const [eventData, setEventData] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -22,6 +22,6 @@ function App() {
     }, []);
 
     return <div>{!loading ? <Map eventData={eventData} /> : <Loader />}</div>;
-}
+};
 
 export default App;

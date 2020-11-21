@@ -1,24 +1,40 @@
-import GoogleMapReact from "google-map-react";
-import LocationMarker from "./LocationMarker";
+import { ReactBingmaps } from "react-bingmaps";
+// import LocationMarker from "./LocationMarker";
 
-const Map = ({ center, zoom }) => {
+const Map = ({ eventData, center, zoom }) => {
+    const markers = eventData
+        .map((ev) => {
+            if (ev.categories[0].id === 8) {
+                return {
+                    location: [
+                        ev.geometries[0].coordinates[1],
+                        ev.geometries[0].coordinates[0],
+                    ],
+                };
+            }
+            return null;
+        })
+        .filter((ev) => {
+            if (ev != null) {
+                return ev;
+            }
+        });
+
     return (
         <div className="map">
-            <GoogleMapReact
-                bootstrapURLKeys={{
-                    key: "AIzaSyCPP3mUoDPonGi5CKEOKWGG6xpJ5CrZxBE",
-                }}
-                defaultCenter={center}
-                defaultZoom={zoom}
-            >
-                <LocationMarker lat={center.lat} lng={center.lng} />
-            </GoogleMapReact>
+            <ReactBingmaps
+                bingmapKey="AkoapnZDPXZkwbySJOyudIoXCNbp3YTot08xL_r6qc68rcMEleLXK_2nf2s3gRmc"
+                center={center}
+                zoom={zoom}
+                pushPins={markers}
+            />
         </div>
     );
 };
 
 Map.defaultProps = {
-    center: { lat: 42.3265, lng: -122.8756 },
+    // center: { latitude: 42.3265, longitude: -122.8756 },
+    center: [42.3265, -122.8756],
     zoom: 6,
 };
 
