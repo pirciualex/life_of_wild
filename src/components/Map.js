@@ -1,15 +1,39 @@
+import { useState } from "react";
 import { ReactBingmaps } from "react-bingmaps";
+import InfoBox from "./InfoBox";
+import fireAlert from "@iconify/icons-mdi/fire-alert";
 // import LocationMarker from "./LocationMarker";
 
 const Map = ({ eventData, center, zoom }) => {
+    const [locationInfo, setLocationInfo] = useState(null);
+    const setInfo = (e) => {
+        setLocationInfo({
+            id: e.id,
+            title: e.title,
+            source: e.sources[0].url,
+        });
+    };
     const markers = eventData
         .map((ev) => {
+            const location = [
+                ev.geometries[0].coordinates[1],
+                ev.geometries[0].coordinates[0],
+            ];
+            const info = `ID: ${ev.id}\nTitle:${ev.title}`;
             if (ev.categories[0].id === 8) {
                 return {
-                    location: [
-                        ev.geometries[0].coordinates[1],
-                        ev.geometries[0].coordinates[0],
-                    ],
+                    location: location,
+                    option: { color: "#dd3529" },
+                    addHandler: "mouseover",
+                    infoboxOption: {
+                        title: "Event Location Info",
+                        description: info,
+                    },
+                    pushPinOption: {
+                        title: "",
+                        description: "Pushpin",
+                    },
+                    icon: fireAlert,
                 };
             }
             return null;
@@ -26,8 +50,9 @@ const Map = ({ eventData, center, zoom }) => {
                 bingmapKey="AkoapnZDPXZkwbySJOyudIoXCNbp3YTot08xL_r6qc68rcMEleLXK_2nf2s3gRmc"
                 center={center}
                 zoom={zoom}
-                pushPins={markers}
+                infoboxesWithPushPins={markers}
             />
+            {/* {locationInfo && <InfoBox info={locationInfo} />} */}
         </div>
     );
 };
